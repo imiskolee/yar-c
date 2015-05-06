@@ -458,5 +458,7 @@ yar_push_string(pk, "e", 1);   //压入第二个key对应的e
 
  最后, Yar的代码中包含了一个Server 和一个Client的例子, 在example目录下.
 
+已经利用Libcurl实现c到php的rpc调用。
 
- 目前已经实现了PHP端请求C服务, C服务互相请求, 考虑到PHP只能通过HTTP协议提供RPC服务, 所以C请求PHP的, 还暂时没有开放.
+
+
