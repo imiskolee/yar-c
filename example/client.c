@@ -46,17 +46,20 @@ void output_response(yar_response *response) {
 
 int main(int argc, char **argv) {
 	int persistent = 1;
-	yar_client *client = yar_client_init("127.0.0.1:8888");
+	yar_client *client = yar_client_init("http://test-yar.local.com");
 	if (client) {
 		int i = 0;
 		yar_client_set_opt(client, YAR_PERSISTENT_LINK, &persistent);
-		while (i++ < 10) {
-			yar_response *response = client->call(client, "default", 0, NULL);
+
+		while (i++ < 1) {
+			yar_response *response = client->call(client, "init", 0, NULL);
+
 			if (response) {
 				output_response(response);
 				yar_response_free(response);
 				free(response);
 			}
+
 		}
 		yar_client_destroy(client);
 	}

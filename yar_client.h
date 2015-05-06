@@ -19,24 +19,49 @@
 #ifndef YAR_CLIENT_H
 #define YAR_CLIENT_H
 
+#include <curl/curl.h>
+#include <curl/easy.h>
+
 #define YAR_CLIENT_NAME "Yar(C)-"YAR_VERSION
 
 typedef struct _yar_client yar_client;
 
 typedef yar_response * (*yar_client_call)(yar_client *client, char *method, uint num_args, yar_packager *packager[]);
 
-struct _yar_client {
-	int fd;
-	char *hostname;
-	int persistent;
-	int timeout;
-	yar_client_call call;
-};
+typedef struct {
+
+    void *buf;
+    int len;
+} yar_client_http_write_buffer;
 
 typedef enum _yar_client_opt {
-	YAR_PERSISTENT_LINK = 1,
-	YAR_CONNECT_TIMEOUT
+    YAR_PERSISTENT_LINK = 1,
+    YAR_CONNECT_TIMEOUT
 } yar_client_opt;
+
+typedef enum {
+
+    YAR_CLIENT_PROTOCOL_SOCK = 1,
+    YAR_CLIENT_PROTOCOL_HTTP
+
+} yar_client_net_protocol;
+
+struct _yar_client {
+    int fd;
+    char *hostname;
+    int persistent;
+    int timeout;
+    yar_client_call call;
+
+    CURL* curl_handle;
+
+    yar_client_http_write_buffer write_buffer;
+
+    yar_client_net_protocol protocol;
+
+};
+
+
 
 yar_client * yar_client_init(char *hostname);
 int yar_client_set_opt(yar_client *client, yar_client_opt opt, void *val);
